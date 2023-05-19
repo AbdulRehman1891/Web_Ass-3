@@ -1,25 +1,31 @@
 const customerRouter=require("express").Router();
 const jwt=require("jsonwebtoken");
 const {verifyUserLoggedIn,checkEmploye} = require("../authenticate");
-const { addcustomer, viewcustomer, deletecustomer, updatecustomer, booking, addtour, searchTour, addtoCart } = require("../Controller/customerController");
+const { addcustomer, viewcustomer, deletecustomer,addPayment,ViewReview,giveReview, updatecustomer, booking,addtoWishlist, addtour, searchTour, addtoCart } = require("../Controller/customerController");
 
 
 
-
+//  Registration
 customerRouter.post("/addcustomer",verifyUserLoggedIn,addcustomer)
 customerRouter.get("/viewcustomer",verifyUserLoggedIn,viewcustomer)
-customerRouter.post("/updatecustomer",verifyUserLoggedIn,updatecustomer)
-customerRouter.post("/deletecustomer",verifyUserLoggedIn,deletecustomer)
+customerRouter.patch("/updatecustomer",verifyUserLoggedIn,updatecustomer)
+customerRouter.delete("/deletecustomer",verifyUserLoggedIn,deletecustomer)
 
+
+
+// Review
+customerRouter.get("/viewreview",ViewReview)
+customerRouter.post("/givereview",giveReview)
+
+
+// Tour Booking
 customerRouter.post("/addtour",addtour)
 customerRouter.post("/addcart",addtoCart)
+customerRouter.post("/addwish",addtoWishlist)
 customerRouter.post("/bookings",booking)
 customerRouter.get("/searchtour",searchTour)
-// tourRouter.post("/customers",customers)
+customerRouter.post("/makepayment",verifyUserLoggedIn,addPayment)
 
-
-// tourRouter.post("/addpayment",addPayment)
-// tourRouter.get("/payments",viewPayments)
 
 
 module.exports=customerRouter

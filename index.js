@@ -13,11 +13,11 @@ mongoose.connect(process.env.MONGO_URL).then(()=>{
    console.log(err) 
 }) 
 
+app.use("/user",uRoutes); 
+app.use("/customer",cRoutes); 
+
 app.listen(process.env.PORT || 3000,()=>{
     console.log(`App listening on port ${process.env.PORT}`)
 })
-
-app.use("/user",uRoutes); 
-app.use("/customer",cRoutes); 
 
 
