@@ -1,6 +1,4 @@
 const mongoose=require ("mongoose")
-
-
 const userSchema=mongoose.Schema({
     name:{
         type:String,
@@ -19,7 +17,7 @@ const userSchema=mongoose.Schema({
     },
     email:{
         type:String,
-        default:"admin"
+        required:true
     },
 },
 {timestamps:true}

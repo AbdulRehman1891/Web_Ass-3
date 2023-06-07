@@ -2,6 +2,7 @@
 const User=require("../Models/userModel")
 const jwt=require("jsonwebtoken");
 const signup= (req,res)=>{
+    console.log(req.body)
    let {name,username,password,email}=req.body;
    let user=new User({
     name,

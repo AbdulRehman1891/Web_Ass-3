@@ -1,7 +1,7 @@
 const customerRouter=require("express").Router();
 const jwt=require("jsonwebtoken");
 const {verifyUserLoggedIn,checkEmploye} = require("../authenticate");
-const { addcustomer, viewcustomer, deletecustomer,addPayment,ViewReview,giveReview, updatecustomer, booking,addtoWishlist, addtour, searchTour, addtoCart } = require("../Controller/customerController");
+const { addcustomer, viewcustomer,getTour,deletecustomer,addPayment,ViewReview,giveReview, updatecustomer, booking,addtoWishlist, addtour, searchTour, addtoCart } = require("../Controller/customerController");
 
 
 
@@ -21,6 +21,7 @@ customerRouter.post("/addcart",addtoCart)
 customerRouter.post("/addwish",addtoWishlist)
 customerRouter.post("/bookings",booking)
 customerRouter.get("/searchtour",searchTour)
+customerRouter.get("/gettour",getTour)
 customerRouter.post("/makepayment",addPayment)
 
 

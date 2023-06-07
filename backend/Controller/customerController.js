@@ -18,8 +18,8 @@ const addcustomer = (req, res) => {
             message: "Customer ID already exists. Please choose a different ID."
           });
         } else {
-          const newTour = new Customer({ customer_id, customer_name, customer_email, customer, customer_phone });
-          newTour.save()
+          const newCustomer = new Customer({ customer_id, customer_name, customer_email, customer, customer_phone });
+          newCustomer.save()
             .then(() => res.status(200).send({
               status: "SUCCESS",
               message: "Customer added successfully."
@@ -38,18 +38,25 @@ const addcustomer = (req, res) => {
   
 
 
-const viewcustomer=async(req,res)=>{
+  const viewcustomer = async (req, res) => {
     try {
-    
-      const tours = await Customer.find();
+      // Assuming you have a way to determine the logged-in customer, such as retrieving their ID from the session or token
+      const loggedInCustomerId = req.session.customerId; // Replace with your specific implementation
   
-      res.send(tours);
+      // Fetch the customer details based on the logged-in customer ID
+      const customer = await Customer.findById(loggedInCustomerId);
+  
+      if (!customer) {
+        return res.status(404).send('Customer not found');
+      }
+  
+      res.send(customer);
     } catch (error) {
       console.error(error);
       res.status(500).send('Internal Server Error');
     }
-    
-  }
+  };
+  
 
 
   const deletecustomer = (req, res) => {
@@ -144,34 +151,53 @@ const updatecustomer = (req, res) => {
 
 
   const addtour = (req, res) => {
-    const { tour_id, tour_name, description, destination, price, departure_date, duration_days } = req.body;
+    console.log(req.body);
+    const { tour_id, tour_name, description, destination, departure_date, duration_days, price } = req.body;
   
     tour.findOne({ tour_id: tour_id })
       .then(existingTour => {
         if (existingTour) {
-          res.status(400).send({
+          res.status(400).json({
             status: "FAILED",
             message: "Tour ID already exists. Please choose a different ID."
           });
         } else {
-          const newTour = new tour({ tour_id, tour_name, description, destination, price, departure_date, duration_days });
+          const newTour = new tour({
+            tour_id,
+            tour_name,
+            description,
+            destination,
+            departure_date: new Date(departure_date),
+            duration_days,
+            price
+          });
           newTour.save()
-            .then(() => res.status(200).send({
+            .then(() => res.status(200).json({
               status: "SUCCESS",
               message: "Tour added successfully."
             }))
-            .catch(err => res.status(500).send({
+            .catch(err => res.status(500).json({
               status: "FAILED",
               message: "Tour not added. Error: " + err.message
             }));
         }
       })
-      .catch(err => res.status(500).send({
+      .catch(err => res.status(500).json({
         status: "FAILED",
         message: "Error checking tour ID. " + err.message
       }));
   };
   
+  
+
+const getTour=async (req, res) => {
+  try {
+    const tours = await tour.find();
+    res.json(tours);
+  } catch (error) {
+    res.status(500).json({ error: 'Server error' });
+  }
+};
 
 const searchTour = (req, res) => {
     const { tour_id } = req.body;
@@ -360,7 +386,8 @@ module.exports={
     addtour,
     addtoWishlist,
     searchTour,
-    addtoCart
+    addtoCart,
+    getTour
 }
 
 
